@@ -1,6 +1,6 @@
 const express = require('express');
 const { default: inquirer } = require('inquirer');
-const mysql = require('mysql2');
+
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -10,16 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Connect to database
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    // MySQL username,
-    user: 'root',
-    // TODO: Add MySQL password here
-    password: '',
-    database: ''
-  },
-  console.log(`Connected to the ... database`)
+
 );
 
 inquirer
@@ -29,6 +20,10 @@ inquirer
         name: "userChoice",
         message: "What would you like to do?",
         choices: [
+            {
+                name: "View all employees",
+                value: "VIEW_EMPLOYEES"
+            }
           "View all departments",
           "View all roles",
           "View all employees",
@@ -38,7 +33,16 @@ inquirer
           "Update an employee role",
         ],
 
-        type: 
-        name: 
+         
     }
-])
+]).then(res => {
+    let choice = res.choice
+    switch (choice){
+        case "VIEW_EMPLOYEES":
+            viewEmployees();
+            break;
+    }
+})
+function viewEmployees(){
+
+}
