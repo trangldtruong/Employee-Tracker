@@ -1,6 +1,18 @@
 {
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.\r ## Usage",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^8.2.4",
-    "mysql2": "^3.6.3"
+    "mysql2": "^2.2.5"
   }
 }
