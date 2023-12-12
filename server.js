@@ -1,9 +1,9 @@
 const { prompt } = require("inquirer");
 const db = require("./db/connection.js");
 require("console.table")
-// Tasks
 
-function menu() {
+// Tasks
+async function menu() {
   prompt([
     {
       type: "list",
@@ -18,7 +18,9 @@ function menu() {
           name: "Add Employee",
           value: "ADD_EMPLOYEE",
         },
-        { name: "Update Employee Role", value: "UPDATE_ROLE" },
+        { name: "Update Employee Role", 
+          value: "UPDATE_ROLE" 
+        },
         {
           name: "View All Roles ",
           value: "VIEW_ROLES",
@@ -74,12 +76,12 @@ function menu() {
 menu();
 
 async function viewEmployees() {
-  const [empData] = await db.promise().query("SELECT * FROM employee");
-  console.table(empData);
-  menu()
-}
+  const [employeeData] = await db.promise().query("SELECT * FROM employee");
+  console.table(employeeData);
+  await menu()
+};
 
-function addEmployee() {
+async function addEmployee() {
   prompt([
     {
       name: "first_name",
@@ -95,14 +97,14 @@ function addEmployee() {
       name: "role",
       type: "list",
       message: "What is the employee's role?",
-      choice: [
+      choices: [
         "Accountant",
         "Legal Team Lead",
         "Lawyer",
         "Customer Service",
         "Sales Lead",
         "Salesperson",
-        "Lead Engineer",
+        "Lead Engineer"
       ],
     },
     {
@@ -115,11 +117,16 @@ function addEmployee() {
         "Ashley Rodriguez",
         "Kevin Tupik",
         "Kunal Singh",
-        "Malia Brown",
-      ],
-    },
-  ]);
-}
+        "Malia Brown"
+      ]
+    }
+  ]).then((res) => {
+     db.promise().query("INSERT INTO employee set ?", res);
+
+  }).then((res) => {
+    menu();
+
+ })};
 
 function updateRole() {
   prompt([
@@ -136,7 +143,7 @@ function updateRole() {
         "Malia Brown",
         "Sarah Lourd",
         "Tom Allen",
-        "Sam Kash",
+        "Sam Kash"
       ],
     },
     {
@@ -150,18 +157,20 @@ function updateRole() {
         "Software Engineer",
         "Account Manager",
         "Accountant",
-        "Legal Team Lead",
-      ],
-    },
-  ]);
-}
+        "Legal Team Lead"
+      ]
+    }
+  ]).then((res) => {
+    console.log(res);
+    db.query("INSERT INTO employee set ?", res)})
+    .then(() => menu())
+};
 
-function viewRoles() {
-  db.query("SELECT * FROM role", function (err, results) {
-    if (err) throw err;
-    console.log(results);
-  });
-}
+async function viewRoles() {
+  const [roleData] = await db.promise().query("SELECT * FROM role");
+  console.table(roleData);
+    menu()
+  };
 
 function addRole() {
   prompt([
@@ -179,24 +188,30 @@ function addRole() {
       name: "department",
       type: "list",
       message: "Which department does the role belong to?",
-      choices: ["Engineering", "Finance", "Legal", "Sales", "Service"],
-    },
-  ]);
+      choices: ["Engineering", "Finance", "Legal", "Sales", "Service"]
+    }
+  ]).then((res) => {
+    console.log(res);
+    db.query("INSERT INTO employee set ?", res)})
+    .then(() => menu())
 }
 
-function viewDepartments() {
-  db.query("SELECT * FROM department", function (err, results) {
-    if (err) throw err;
-    console.log(results);
-  });
-}
+async function viewDepartments() {
+  const [departmentData] = await db.query("SELECT * FROM department") 
+    console.table(departmentData);
+    menu();
+  };
 
-function addDepartment() {
-  prompt([
+
+async function addDepartment() {
+  await prompt([
     {
       name: "name",
       type: "input",
-      message: "What is the name of the department?",
-    },
-  ]);
-}
+      message: "What is the name of the department?"
+    }
+  ]).then((res) => {
+    console.log(res);
+    db.query("INSERT INTO employee set ?", res)})
+    .then(() => menu())
+  }
